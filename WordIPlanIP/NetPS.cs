@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace WordPlanIP
+namespace PlanIP
 {
     public class NetPS
     {

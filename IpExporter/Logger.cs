@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WordPlanIP;
+using PlanIP;
 using IpLibrary;
 using System.Windows;
 using System.Runtime.CompilerServices;
@@ -17,9 +17,11 @@ namespace IpExporter
     public  class Logger
     {
         private List<NetPS> stations;
-        public Logger(IExporterStations exporter)
+        public Logger(params IExporterStations[] exporters)
         {
-            stations = exporter.Stations;
+            stations = exporters.
+                SelectMany(exporter=>exporter.Stations).
+                ToList();
         }
         public  string GetInformation()
         {
@@ -99,13 +101,13 @@ namespace IpExporter
             paragraph.Inlines.Add("  Не принадлежащие подсети\n") ;
             foreach (var subnet in netPS.NotOwnedSubnets)
             {
-                string s = $"\t{subnet}[{subnet.GroupNet}] не входит ни в одну сеть";
+                string s = $"\t{subnet} не входит ни в одну сеть";
                 foreach (var PS in listNetPS)
                 {
                     if (NetAddress.IsAffiliation(subnet, PS.TotalNet)
                         && subnet.Prefix > PS.TotalNet.Prefix)
                     {
-                        s = $"\t{subnet}[{subnet.GroupNet}] входит в сеть {PS.Name}({PS.TotalNet}";
+                        s = $"\t{subnet} входит в сеть {PS.Name}({PS.TotalNet})";
                         break;
                     }
                 }

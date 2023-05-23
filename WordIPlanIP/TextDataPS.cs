@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WordPlanIP
+namespace PlanIP
 {
     public record TextDataPS(string NamePS, string TotalNet,
             string TM, string MGMT, string CRAP, string ASKUE, string Control,

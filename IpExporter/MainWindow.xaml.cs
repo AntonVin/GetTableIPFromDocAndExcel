@@ -15,7 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WordPlanIP;
+using PlanIP;
 using IpLibrary;
 using forms = System.Windows.Forms;
 
@@ -50,7 +50,8 @@ namespace IpExporter
                 return;
             }
             var exporterDocs = new ExporterStationsFromDoc(txtBoxPath.Text);
-            var logger = new Logger(exporterDocs);
+            var exporterExcels = new ExporterStationsFromExcel(txtBoxPath.Text);
+            var logger = new Logger(exporterDocs, exporterExcels);
             //txtBoxLog.Text = new Logger(expDocs).GetInformation();
             logger.GetInformation(richTxtLog);
         }

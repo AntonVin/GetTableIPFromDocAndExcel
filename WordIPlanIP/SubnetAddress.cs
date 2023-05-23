@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WordPlanIP
+namespace PlanIP
 {
     public class SubnetAddress : NetAddress
     {
-        public Group GroupNet { get;}
+        public Group GroupNet { get; set; }
         public enum Group
         {
             TM,
@@ -27,6 +27,11 @@ namespace WordPlanIP
         public SubnetAddress(string addressIp,Group group) : base(addressIp)
         {
             this.GroupNet = group;
+        }
+
+        public override string ToString()
+        {
+            return base.ToString()+ "["+this.GroupNet+"]";
         }
     }
 }

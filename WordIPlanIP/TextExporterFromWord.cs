@@ -4,7 +4,7 @@ using word = Microsoft.Office.Interop.Word;
 using System.Text.RegularExpressions;
 using Microsoft.Office.Interop.Word;
 
-namespace WordPlanIP
+namespace PlanIP
 {
     public class TextExporterFromWord
     {

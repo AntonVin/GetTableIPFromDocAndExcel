@@ -1,6 +1,6 @@
 using System.Reflection;
 using System.Threading.Channels;
-using WordPlanIP;
+using PlanIP;
 using word = Microsoft.Office.Interop.Word;
 
 namespace GetTableFromDocAndExcel.Test

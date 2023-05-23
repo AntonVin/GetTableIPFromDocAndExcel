@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IpLibrary;
 
-namespace WordPlanIP.Test
+namespace PlanIP.Test
 {
     public class NetPSTests
     {
