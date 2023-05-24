@@ -52,6 +52,10 @@ namespace IpExporter
             var exporterDocs = new ExporterStationsFromDoc(txtBoxPath.Text);
             var exporterExcels = new ExporterStationsFromExcel(txtBoxPath.Text);
             var logger = new Logger(exporterDocs, exporterExcels);
+            txtBlCountStations.Text = logger.Stations.Count.ToString();
+            txtBlCountProblemStations.Text = logger.Stations.
+                Where(net=>net.AllSubnets.Count!=net.CorrectSubnets.Count).
+                Count().ToString();
             //txtBoxLog.Text = new Logger(expDocs).GetInformation();
             logger.GetInformation(richTxtLog);
         }

@@ -9,9 +9,9 @@
     <Grid Background="LightGray">
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="0.1*">
-            </RowDefinition>
+            <RowDefinition Height="0.1*"/>
             <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="0.075*"/>
         </Grid.RowDefinitions>
         <!-- <TextBox TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" Grid.Row="0" x:Name ="txtBoxLog"></TextBox> -->
         <RichTextBox VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" x:Name="richTxtLog"/>
@@ -28,5 +28,19 @@
         <Button Grid.Row="2"  x:Name="Start" Click="Button_Click">
             <Run FontSize="30">Поехали!</Run>
         </Button>
+        <StatusBar Grid.Row="4">
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Обработано станций: "/>
+                    <TextBlock x:Name ="txtBlCountStations" Text="0"/>
+                </StackPanel>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right" Background="PaleVioletRed">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Станций с проблемами: "/>
+                    <TextBlock x:Name ="txtBlCountProblemStations" Text="0"/>
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>

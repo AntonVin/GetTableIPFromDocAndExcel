@@ -16,10 +16,10 @@ namespace IpExporter
 {
     public  class Logger
     {
-        private List<NetPS> stations;
+        public List<NetPS> Stations { get; }
         public Logger(params IExporterStations[] exporters)
         {
-            stations = exporters.
+            Stations = exporters.
                 SelectMany(exporter=>exporter.Stations).
                 ToList();
         }
@@ -27,13 +27,13 @@ namespace IpExporter
         {
 
             var sb = new StringBuilder();
-            foreach (var netPS in stations)
+            foreach (var netPS in Stations)
             {
                 sb.AppendLine(netPS.Name + " " + netPS.TotalNet);
 
                 if (netPS.NotOwnedSubnets.Count > 0)
                 {
-                    PrintNotOwnedSB(netPS, stations, sb);
+                    PrintNotOwnedSB(netPS, Stations, sb);
                 }
 
                 if (netPS.CrossedSubnets.Count > 0)
@@ -52,13 +52,13 @@ namespace IpExporter
         public void GetInformation(RichTextBox rich)
         {
             var flowDoc = new FlowDocument();
-            foreach (var netPS in stations)
+            foreach (var netPS in Stations)
             {
                 flowDoc.Blocks.Add(new Paragraph(new Bold(new Run(netPS.Name + "\n" + netPS.TotalNet))));
 
                 if (netPS.NotOwnedSubnets.Count > 0)
                 {
-                    PrintNotOwnedRich(netPS, stations, flowDoc);
+                    PrintNotOwnedRich(netPS, Stations, flowDoc);
                 }
 
                 if (netPS.CrossedSubnets.Count > 0)
