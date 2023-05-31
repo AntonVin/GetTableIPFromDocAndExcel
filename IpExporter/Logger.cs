@@ -68,7 +68,7 @@ namespace IpExporter
 
                 if (netPS.CrossedSubnets.Count == 0 && netPS.NotOwnedSubnets.Count == 0)
                     flowDoc.Blocks.Add(new Paragraph(new Run("Все подсети корректны"){
-                        Foreground = new SolidColorBrush(System.Windows.Media.Colors.Green)}));
+                        Foreground = Brushes.Green}));
 
                 rich.Document = flowDoc;
             }
@@ -95,9 +95,7 @@ namespace IpExporter
             }
         private void PrintNotOwnedRich(NetPS netPS, List<NetPS> listNetPS, FlowDocument flowDoc)
         {
-            var paragraph = new Paragraph() {
-                Foreground = new SolidColorBrush(System.Windows.Media.Colors.DarkRed)
-            };
+            var paragraph = new Paragraph() {Foreground = Brushes.DarkRed};
             paragraph.Inlines.Add("  Не принадлежащие подсети\n") ;
             foreach (var subnet in netPS.NotOwnedSubnets)
             {
@@ -124,11 +122,8 @@ namespace IpExporter
 
         private void PrintCrossedRich(NetPS netPS, FlowDocument flowDoc)
         {
-            var paragraph = new Paragraph()
-            {
-                Foreground = new SolidColorBrush(System.Windows.Media.Colors.OrangeRed)
-            };
-             paragraph.Inlines.Add("  Пересекающиеся внутри подсети\n");
+            var paragraph = new Paragraph(){ Foreground = Brushes.OrangeRed };
+            paragraph.Inlines.Add("  Пересекающиеся внутри подсети\n");
             paragraph.Inlines.Add("\t" + string.Join($"{Environment.NewLine}\t", netPS.CrossedSubnets));
             flowDoc.Blocks.Add(paragraph);
         }
