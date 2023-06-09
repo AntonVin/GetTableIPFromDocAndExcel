@@ -16,12 +16,27 @@ namespace IpExporter
 {
     public  class Logger
     {
-        public List<NetPS> Stations { get; }
-        public Logger(params IExporterStations[] exporters)
+        public List<NetPS> Stations{ get; set; }
+        private IProgress<int> progress;
+        private IExporterStations[] exporters;
+        public Logger(IProgress<int> progress,params IExporterStations[] exporters)
         {
-            Stations = exporters.
-                SelectMany(exporter=>exporter.Stations).
-                ToList();
+            this.progress = progress;
+            this.exporters= exporters;
+
+        }
+        async public Task Initilize()
+        {
+            int i = 0;
+            await Task.Run(
+                ()=>this.Stations = exporters.
+                    SelectMany(exporter =>
+                    {
+                        exporter.FileCompleted += () => progress.Report(i++);
+                        return exporter.GetListNetPS();
+                    }).
+                    ToList()
+                );
         }
         public  string GetInformation()
         {

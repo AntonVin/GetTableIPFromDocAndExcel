@@ -9,13 +9,15 @@
     <Grid Background="LightGray">
         <Grid.RowDefinitions>
             <RowDefinition/>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="0.1*"/>
             <RowDefinition Height="0.2*"/>
             <RowDefinition Height="0.075*"/>
         </Grid.RowDefinitions>
         <!-- <TextBox TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" Grid.Row="0" x:Name ="txtBoxLog"></TextBox> -->
         <RichTextBox VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" x:Name="richTxtLog"/>
-        <Grid Grid.Row="1">
+        <ProgressBar x:Name="progBar" Grid.Row="1" Background="DimGray"/>
+        <Grid Grid.Row="2">
             <TextBox TextWrapping="Wrap" x:Name="txtBoxPath" Margin="0,0,45,0"/>
             <Button x:Name="btnFolderDialog" Click="btnFolderDialog_Click" HorizontalAlignment="Right" MaxWidth="45">
                 <Button.Content>
@@ -25,7 +27,7 @@
                 </Button.Content>
             </Button>
         </Grid>
-        <Button Grid.Row="2"  x:Name="Start" Click="Button_Click">
+        <Button Grid.Row="3"  x:Name="Start" Click="Button_Click">
             <Run FontSize="30">Поехали!</Run>
         </Button>
         <StatusBar Grid.Row="4">

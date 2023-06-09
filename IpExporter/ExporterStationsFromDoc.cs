@@ -10,22 +10,25 @@ namespace IpExporter
 {
     public class ExporterStationsFromDoc : IExporterStations
     {
-        public List<NetPS> Stations{ get; }
+        public string Directory { get; set; }
+        public string[] FileNames => System.IO.Directory.GetFiles(this.Directory, "*.doc*");
+
+        public event Action?FileCompleted;
 
         public ExporterStationsFromDoc(string directory)
         {
-            Stations = GetListNetPS(directory);
+            this.Directory = directory;
         }
 
-        private List<NetPS> GetListNetPS(string directory)
+        public List<NetPS> GetListNetPS()
         {
             var output = new List<NetPS>();
-            var files = System.IO.Directory.GetFiles(directory, "*.doc*");
-            foreach (var file in files)
+            foreach (var file in FileNames)
             {
                 TextDataPS tdPS = TextExporterFromWord.GetTextDataPsFromDoc(file);
                 var netPS = new NetPS(tdPS);
                 output.Add(netPS);
+               FileCompleted?.Invoke();
             }
             return output;
         }

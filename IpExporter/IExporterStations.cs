@@ -10,7 +10,12 @@ namespace IpExporter
 {
     public interface IExporterStations
     {
-        public List<NetPS> Stations { get; }
+        public string Directory{ get; set; }
+
+        public string[] FileNames { get; }
+        public List<NetPS> GetListNetPS();
+
+        public event Action? FileCompleted;
 
     }
 }

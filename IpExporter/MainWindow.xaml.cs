@@ -39,7 +39,7 @@ namespace IpExporter
             return path;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        async private void Button_Click(object sender, RoutedEventArgs e)
         {
             var foderIsExists = Directory.Exists(txtBoxPath.Text);
             if (!foderIsExists)
@@ -48,10 +48,21 @@ namespace IpExporter
                     "Неверный путь",MessageBoxButton.OK,MessageBoxImage.Error);
                 txtBoxPath.Focus();
                 return;
-            }
+            }   
+
+
             var exporterDocs = new ExporterStationsFromDoc(txtBoxPath.Text);
             var exporterExcels = new ExporterStationsFromExcel(txtBoxPath.Text);
-            var logger = new Logger(exporterDocs, exporterExcels);
+
+            int countFiles = exporterDocs.FileNames.Count() + exporterExcels.FileNames.Count();
+            progBar.Maximum = countFiles;
+
+            var progress = new Progress<int>();
+            progress.ProgressChanged += (a, e) => progBar.Value++;
+
+            var logger = new Logger( progress,exporterDocs, exporterExcels);
+            await logger.Initilize();
+
             txtBlCountStations.Text = logger.Stations.Count.ToString();
             txtBlCountProblemStations.Text = logger.Stations.
                 Where(net=>net.AllSubnets.Count!=net.CorrectSubnets.Count).

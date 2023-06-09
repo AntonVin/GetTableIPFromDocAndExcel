@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.Utilities;
@@ -11,23 +12,25 @@ namespace IpExporter
 {
     public class ExporterStationsFromExcel : IExporterStations
     {
-        public List<NetPS> Stations { get; }
+        public string Directory { get; set; }
+        public string[] FileNames => System.IO.Directory.GetFiles(this.Directory, "*.xls*");
 
+        public event Action? FileCompleted;
         public ExporterStationsFromExcel(string directory)
         {
-            Stations = GetListNetPS(directory);
+            this.Directory = directory;
         }
 
-        private List<NetPS> GetListNetPS(string directory)
+        public List<NetPS> GetListNetPS()
         {
             var output = new List<NetPS>();
             var excelApp = new Excel.Application();
             excelApp.Visible = true;
-            var files = System.IO.Directory.GetFiles(directory, "*.xls*");
-            foreach (var fileName in files)
+            foreach (var fileName in this.FileNames)
             {
                 var stationsFromFile = GetFromOneFile(fileName, excelApp);
                 output.AddRange(stationsFromFile);
+                FileCompleted?.Invoke();
             }
             excelApp.Quit();
             return output;
