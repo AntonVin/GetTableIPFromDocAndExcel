@@ -11,32 +11,34 @@ using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Threading;
+using Newtonsoft.Json.Linq;
 
 namespace IpExporter
 {
     public  class Logger
     {
         public List<NetPS> Stations{ get; set; }
-        private IProgress<int> progress;
         private IExporterStations[] exporters;
-        public Logger(IProgress<int> progress,params IExporterStations[] exporters)
+        public Logger(params IExporterStations[] exporters)
         {
-            this.progress = progress;
             this.exporters= exporters;
-
         }
-        async public Task Initilize()
+        async public Task InitilizeAsync(IProgress<int> progress, CancellationTokenSource cancellation)
         {
+            var token = cancellation.Token;
             int i = 0;
             await Task.Run(
                 ()=>this.Stations = exporters.
                     SelectMany(exporter =>
                     {
-                        exporter.FileCompleted += () => progress.Report(i++);
+                       if (token.IsCancellationRequested)
+                            token.ThrowIfCancellationRequested();
+                        exporter.FileCompleted += () => progress.Report(++i);
                         return exporter.GetListNetPS();
                     }).
                     ToList()
-                );
+                , token);
         }
         public  string GetInformation()
         {

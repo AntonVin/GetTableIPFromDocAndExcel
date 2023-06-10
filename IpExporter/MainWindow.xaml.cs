@@ -18,6 +18,7 @@ using System.Windows.Shapes;
 using PlanIP;
 using IpLibrary;
 using forms = System.Windows.Forms;
+using System.Threading;
 
 namespace IpExporter
 {
@@ -26,6 +27,7 @@ namespace IpExporter
     /// </summary>
     public partial class MainWindow : Window
     {
+        CancellationTokenSource cancellation;
         public MainWindow()
         {
             InitializeComponent();
@@ -48,8 +50,11 @@ namespace IpExporter
                     "Неверный путь",MessageBoxButton.OK,MessageBoxImage.Error);
                 txtBoxPath.Focus();
                 return;
-            }   
+            }
 
+            btnStart.Content = "Отменить операцию";
+            btnStart.Click -= Button_Click;
+            btnStart.Click += CancelTask;
 
             var exporterDocs = new ExporterStationsFromDoc(txtBoxPath.Text);
             var exporterExcels = new ExporterStationsFromExcel(txtBoxPath.Text);
@@ -57,11 +62,30 @@ namespace IpExporter
             int countFiles = exporterDocs.FileNames.Count() + exporterExcels.FileNames.Count();
             progBar.Maximum = countFiles;
 
-            var progress = new Progress<int>();
-            progress.ProgressChanged += (a, e) => progBar.Value++;
+            var logger = new Logger( exporterDocs, exporterExcels);
+            var progress = new Progress<int>(p => progBar.Value = p);
 
-            var logger = new Logger( progress,exporterDocs, exporterExcels);
-            await logger.Initilize();
+            this.cancellation = new CancellationTokenSource();
+            try
+            {
+                await logger.InitilizeAsync(progress, cancellation);
+            }
+            catch (Exception)
+            {
+                        MessageBox.Show("Операция отменена");
+                return;
+            }
+            finally
+            {
+                MessageBox.Show("Операция ОТМЕНЕНА");
+                cancellation.Dispose();
+
+                btnStart.Content = "Поехали!";
+                btnStart.Click -= CancelTask;
+                btnStart.Click += Button_Click;
+                progBar.Value = 0;
+            }
+            
 
             txtBlCountStations.Text = logger.Stations.Count.ToString();
             txtBlCountProblemStations.Text = logger.Stations.
@@ -78,6 +102,11 @@ namespace IpExporter
             if (result == System.Windows.Forms.DialogResult.OK)
                 txtBoxPath.Text = folderDialog.SelectedPath;
                 
+        }
+
+        private void CancelTask(object sender, RoutedEventArgs e)
+        {
+            cancellation.Cancel();
         }
     }
 }

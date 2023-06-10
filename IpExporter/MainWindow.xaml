@@ -27,7 +27,7 @@
                 </Button.Content>
             </Button>
         </Grid>
-        <Button Grid.Row="3"  x:Name="Start" Click="Button_Click">
+        <Button Grid.Row="3"  x:Name="btnStart" Click="Button_Click">
             <Run FontSize="30">Поехали!</Run>
         </Button>
         <StatusBar Grid.Row="4">
